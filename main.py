@@ -45,3 +45,37 @@ def label_propagation(A, max_iter):
 
     return Rotulos
 
+if __name__ == "__main__":
+
+    #pega o arquivo que escrevemos no python main.py <nome do arquivo>
+    if len(sys.argv) > 1:
+        caminho_arquivo = sys.argv[1] 
+    else:
+        print("Por favor, forneça o caminho do arquivo como argumento.")
+        sys.exit(1)
+    #lemos o arquivo e pegamos as arestas
+    arestas = np.loadtxt(caminho_arquivo, delimiter=',', dtype=int)
+    grafo = nx.Graph()
+    grafo.add_edges_from(arestas)
+    A = nx.to_numpy_array(grafo)    
+
+    print(f"Matrix da rede {caminho_arquivo}")
+    print(A)
+
+    #label_propagation(matriz, iteracoes maximas)
+    rotulos_finais = label_propagation(A, 100)
+
+    print("Comunidades encontradas:")
+    print(rotulos_finais)
+
+
+    #visualizando o grafo pintado referente aos rotulos
+    print("\nGerando gráfico das comunidades...")
+    nx.draw(
+        grafo, 
+        with_labels=True, 
+        node_color=rotulos_finais, #rotulos iguais recebem a mesma cor
+        cmap=plt.cm.Set3, 
+        node_size=700, 
+    )
+    plt.show() 
